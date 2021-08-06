@@ -114,7 +114,7 @@ class BalloonDataset(utils.Dataset):
             'blocked the crosswalk': True,
             'blocked bike lane': True
         }
-        files = glob.glob(osp.join(dataset_dir, "*.json")
+        files = glob.glob(osp.join(dataset_dir, "*.json"))
         for file in files:
             annotation = json.load(open(file))
 
