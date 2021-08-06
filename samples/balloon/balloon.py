@@ -135,6 +135,8 @@ class BalloonDataset(utils.Dataset):
                 polygon = shape["points"]
                 polygons.append(polygon)
                 labels.append(label)
+            if len(labels)==0:
+                continue
             image_path = os.path.join(dataset_dir, str(p.with_suffix('.jpg')))
             image = skimage.io.imread(image_path)
             height, width = image.shape[:2]
@@ -176,7 +178,6 @@ class BalloonDataset(utils.Dataset):
         # [height, width, instance_count]
         info = self.image_info[image_id]
         polygons = info["polygons"]
-        labels = info["labels"]
         mask = np.zeros([info["height"], info["width"], len(info["polygons"])],
                         dtype=np.uint8)
         for index in polygons:
