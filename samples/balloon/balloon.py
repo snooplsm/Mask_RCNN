@@ -28,6 +28,7 @@ Usage: import the module (see Jupyter notebooks for examples), or run from
 """
 
 import os
+import os.path as osp
 import sys
 import json
 import glob
