@@ -188,7 +188,7 @@ class BalloonDataset(utils.Dataset):
                 y.append(k[1])
             # Get indexes of pixels inside the polygon and set them to 1
             rr, cc = skimage.draw.polygon(x, y)
-            mask[rr, cc, i] = 1
+            mask[rr, cc, index] = 1
 
         # Return mask, and array of class IDs of each instance. Since we have
         # one class ID only, we return an array of 1s
