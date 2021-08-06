@@ -123,7 +123,7 @@ class BalloonDataset(utils.Dataset):
             annotation = json.load(open(file))
 
             # Add images
-            for a in annotations:
+            for a in annotation:
                 for shape in a["shapes"]:
                     label = shape["label"]
                     if label not in labels:
