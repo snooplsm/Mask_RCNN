@@ -90,8 +90,8 @@ class BalloonDataset(utils.Dataset):
         subset: Subset to load: train or val
         """
         # Add classes. We have only one class to add.
-        self.add_class("blocked bike lane", 1, "blocked bike lane")
-        self.add_class("blocked the crosswalk", 2, "blocked crosswalk")
+        self.add_class("reported", 1, "blocked bike lane")
+        self.add_class("reported", 2, "blocked crosswalk")
 
         # Train or validation dataset?
         assert subset in ["train", "val"]
@@ -171,6 +171,7 @@ class BalloonDataset(utils.Dataset):
         for i, p in enumerate(info["polygons"]):
             x = []
             y = []
+            print(p)
             for k in p:
                 x.append(p[0])
                 y.append(p[1])
