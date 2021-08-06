@@ -121,26 +121,24 @@ class BalloonDataset(utils.Dataset):
         # print("found files", files)
         for file in files:
             annotation = json.load(open(file))
-            # Add images
-            for a in annotation:
-                for shapeIndex in a["shapes"]:
-                    shape = a["shapes"][shapeIndex]
-                    label = shape["label"]
-                    if label not in labels:
-                        continue
-                    if shape["shape_type"]!="polygon":
-                        continue
-                    polygons = shape["points"]
-                    image_path = os.path.join(dataset_dir, a['imagePath'])
-                    image = skimage.io.imread(image_path)
-                    height, width = image.shape[:2]
-                    print("adding image ", label)
-                    self.add_image(
-                        label,
-                        image_id=a['imagePath'],  # use file name as a unique image id
-                        path=image_path,
-                        width=width, height=height,
-                        polygons=polygons)
+            a = annotation
+            for shape in a["shapes"]:
+                label = shape["label"]
+                if label not in labels:
+                    continue
+                if shape["shape_type"]!="polygon":
+                    continue
+                polygons = shape["points"]
+                image_path = os.path.join(dataset_dir, a['imagePath'])
+                image = skimage.io.imread(image_path)
+                height, width = image.shape[:2]
+                print("adding image ", label)
+                self.add_image(
+                    label,
+                    image_id=a['imagePath'],  # use file name as a unique image id
+                    path=image_path,
+                    width=width, height=height,
+                    polygons=polygons)
         #
         # annotations = json.load(open(os.path.join(dataset_dir, "via_region_data.json")))
         # annotations = list(annotations.values())  # don't need the dict keys
