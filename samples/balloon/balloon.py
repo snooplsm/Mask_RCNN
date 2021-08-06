@@ -128,7 +128,7 @@ class BalloonDataset(utils.Dataset):
             labels = []
             for shape in a["shapes"]:
                 label = shape["label"]
-                if label not in labels:
+                if label not in labelz:
                     continue
                 if shape["shape_type"]!="polygon":
                     continue
@@ -138,7 +138,7 @@ class BalloonDataset(utils.Dataset):
             image_path = os.path.join(dataset_dir, str(p.with_suffix('.jpg')))
             image = skimage.io.imread(image_path)
             height, width = image.shape[:2]
-            print("adding image ", label, polygons)
+            print("adding image ", polygons, labels)
             suff = str(p.with_suffix('.jpg'))
             num_ids = []
             for x in labels:
