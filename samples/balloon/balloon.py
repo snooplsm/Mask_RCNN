@@ -95,7 +95,7 @@ class BalloonDataset(utils.Dataset):
         # Train or validation dataset?
         assert subset in ["train", "val"]
         dataset_dir = os.path.join(dataset_dir, subset)
-
+        print("dataset_dir",dataset_dir)
         # Load annotations
         # VGG Image Annotator (up to version 1.6) saves each image in the form:
         # { 'filename': '28503151_5b5b7ec140_b.jpg',
@@ -116,7 +116,9 @@ class BalloonDataset(utils.Dataset):
             'blocked the crosswalk': True,
             'blocked bike lane': True
         }
+        print("labels", labels)
         files = glob.glob(osp.join(dataset_dir, "*.json"))
+        print("found files", files)
         for file in files:
             annotation = json.load(open(file))
 
