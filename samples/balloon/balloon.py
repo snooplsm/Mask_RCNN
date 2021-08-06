@@ -180,8 +180,7 @@ class BalloonDataset(utils.Dataset):
         polygons = info["polygons"]
         mask = np.zeros([info["height"], info["width"], len(info["polygons"])],
                         dtype=np.uint8)
-        for index in len(polygons):
-            polygon = polygons[index]
+        for index, polygon in enumerate(polygons):
             label = labels[index]
             x = []
             y = []
