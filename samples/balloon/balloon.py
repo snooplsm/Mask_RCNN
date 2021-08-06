@@ -135,9 +135,10 @@ class BalloonDataset(utils.Dataset):
                 image = skimage.io.imread(image_path)
                 height, width = image.shape[:2]
                 print("adding image ", label, polygons)
+                suff = str(p.with_suffix('.jpg'))
                 self.add_image(
                     "reported",
-                    image_id=str(p.with_suffix('.jpg')),  # use file name as a unique image id
+                    image_id=f'{label}_{suff}',  # use file name as a unique image id
                     path=image_path,
                     width=width, height=height,
                     polygons=polygons)
