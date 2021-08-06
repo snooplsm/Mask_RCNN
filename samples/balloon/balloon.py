@@ -178,9 +178,10 @@ class BalloonDataset(utils.Dataset):
         # [height, width, instance_count]
         info = self.image_info[image_id]
         polygons = info["polygons"]
-        mask = np.zeros([info["height"], info["width"], len(info["polygons"])],
+        mask = np.zeros([info["height"], info["width"], len(polygons)],
                         dtype=np.uint8)
         for index, polygon in enumerate(polygons):
+            print(index)
             x = []
             y = []
             for k in polygon:
