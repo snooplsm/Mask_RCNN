@@ -183,7 +183,7 @@ class BalloonDataset(utils.Dataset):
         for index, polygon in enumerate(polygons):
             x = []
             y = []
-            for k in p:
+            for k in polygon:
                 x.append(p[0])
                 y.append(p[1])
             # Get indexes of pixels inside the polygon and set them to 1
