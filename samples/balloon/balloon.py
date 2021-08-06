@@ -59,14 +59,14 @@ class BalloonConfig(Config):
     Derives from the base Config class and overrides some values.
     """
     # Give the configuration a recognizable name
-    NAME = "balloon"
+    NAME = "reported"
 
     # We use a GPU with 12GB memory, which can fit two images.
     # Adjust down if you use a smaller GPU.
     IMAGES_PER_GPU = 2
 
     # Number of classes (including background)
-    NUM_CLASSES = 1 + 1  # Background + balloon
+    NUM_CLASSES = 1 + 2  # Background + balloon
 
     # Number of training steps per epoch
     STEPS_PER_EPOCH = 100
@@ -87,7 +87,8 @@ class BalloonDataset(utils.Dataset):
         subset: Subset to load: train or val
         """
         # Add classes. We have only one class to add.
-        self.add_class("balloon", 1, "balloon")
+        self.add_class("blocked bike lane", 1, "blocked bike lane")
+        self.add_class("blocked the crosswalk", 2, "blocked crosswalk")
 
         # Train or validation dataset?
         assert subset in ["train", "val"]
@@ -109,37 +110,39 @@ class BalloonDataset(utils.Dataset):
         # }
         # We mostly care about the x and y coordinates of each region
         # Note: In VIA 2.0, regions was changed from a dict to a list.
-        annotations = json.load(open(os.path.join(dataset_dir, "via_region_data.json")))
-        annotations = list(annotations.values())  # don't need the dict keys
+        labels = {
+            'blocked the crosswalk': True,
+            'blocked bike lane': True
+        }
+        files = glob.glob(osp.join(dataset_dir, "*.json")
+        for file in files:
+            annotation = json.load(open(file))
+
+            # Add images
+            for a in annotations:
+                for shape in a["shapes"]:
+                    label = shape["label"]
+                    if label not in labels:
+                        continue
+                    if shape["shape_type"]!="polygon":
+                        continue
+                    polygons = shape["points"]
+                    image_path = os.path.join(dataset_dir, a['imagePath'])
+                    image = skimage.io.imread(image_path)
+                    height, width = image.shape[:2]
+                    self.add_image(
+                        label,
+                        image_id=a['imagePath'],  # use file name as a unique image id
+                        path=image_path,
+                        width=width, height=height,
+                        polygons=polygons)
+        #
+        # annotations = json.load(open(os.path.join(dataset_dir, "via_region_data.json")))
+        # annotations = list(annotations.values())  # don't need the dict keys
 
         # The VIA tool saves images in the JSON even if they don't have any
         # annotations. Skip unannotated images.
-        annotations = [a for a in annotations if a['regions']]
 
-        # Add images
-        for a in annotations:
-            # Get the x, y coordinaets of points of the polygons that make up
-            # the outline of each object instance. These are stores in the
-            # shape_attributes (see json format above)
-            # The if condition is needed to support VIA versions 1.x and 2.x.
-            if type(a['regions']) is dict:
-                polygons = [r['shape_attributes'] for r in a['regions'].values()]
-            else:
-                polygons = [r['shape_attributes'] for r in a['regions']] 
-
-            # load_mask() needs the image size to convert polygons to masks.
-            # Unfortunately, VIA doesn't include it in JSON, so we must read
-            # the image. This is only managable since the dataset is tiny.
-            image_path = os.path.join(dataset_dir, a['filename'])
-            image = skimage.io.imread(image_path)
-            height, width = image.shape[:2]
-
-            self.add_image(
-                "balloon",
-                image_id=a['filename'],  # use file name as a unique image id
-                path=image_path,
-                width=width, height=height,
-                polygons=polygons)
 
     def load_mask(self, image_id):
         """Generate instance masks for an image.
