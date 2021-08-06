@@ -169,10 +169,10 @@ class BalloonDataset(utils.Dataset):
         mask = np.zeros([info["height"], info["width"], len(info["polygons"])],
                         dtype=np.uint8)
         for i, p in enumerate(info["polygons"]):
-            print("polygons", p)
             x = []
             y = []
             for i in p:
+                print(i)
                 x.append(int(i[0]))
                 y.append(int(i[1]))
             # Get indexes of pixels inside the polygon and set them to 1
