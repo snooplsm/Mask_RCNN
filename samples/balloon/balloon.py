@@ -91,10 +91,15 @@ class BalloonDataset(utils.Dataset):
         """
         # Add classes. We have only one class to add.
         self.add_class("reported", 1, "blocked bike lane")
-        self.add_class("reported", 2, "blocked crosswalk")
+        self.add_class("reported", 2, "blocked the crosswalk")
 
         # Train or validation dataset?
         assert subset in ["train", "val"]
+        labelz = {
+            "blocked bike lane": 1,
+            "blcoked the crosswalk": 2
+        }
+
         dataset_dir = os.path.join(dataset_dir, subset)
         print("dataset_dir",dataset_dir)
         # Load annotations
@@ -113,35 +118,40 @@ class BalloonDataset(utils.Dataset):
         # }
         # We mostly care about the x and y coordinates of each region
         # Note: In VIA 2.0, regions was changed from a dict to a list.
-        labels = {
-            'blocked the crosswalk': True,
-            'blocked bike lane': True
-        }
-        print("labels", labels)
         files = glob.glob(osp.join(dataset_dir, "*.json"))
         # print("found files", files)
         for file in files:
             p = Path(file)
             annotation = json.load(open(file))
             a = annotation
+            polygons = []
+            labels = []
             for shape in a["shapes"]:
                 label = shape["label"]
                 if label not in labels:
                     continue
                 if shape["shape_type"]!="polygon":
                     continue
-                polygons = shape["points"]
-                image_path = os.path.join(dataset_dir, str(p.with_suffix('.jpg')))
-                image = skimage.io.imread(image_path)
-                height, width = image.shape[:2]
-                print("adding image ", label, polygons)
-                suff = str(p.with_suffix('.jpg'))
-                self.add_image(
-                    "reported",
-                    image_id=f'{label}_{suff}',  # use file name as a unique image id
-                    path=image_path,
-                    width=width, height=height,
-                    polygons=polygons)
+                polygon = shape["points"]
+                polygons.append(polygon)
+                labels.append(label)
+            image_path = os.path.join(dataset_dir, str(p.with_suffix('.jpg')))
+            image = skimage.io.imread(image_path)
+            height, width = image.shape[:2]
+            print("adding image ", label, polygons)
+            suff = str(p.with_suffix('.jpg'))
+            num_ids = []
+            for x in labels:
+                if x in labelz:
+                    num_ids.append(labelz[x])
+            self.add_image(
+                "reported",
+                image_id=f'{suff}',  # use file name as a unique image id
+                path=image_path,
+                width=width, height=height,
+                polygons=polygons,
+                num_ids=num_ids
+                )
         #
         # annotations = json.load(open(os.path.join(dataset_dir, "via_region_data.json")))
         # annotations = list(annotations.values())  # don't need the dict keys
@@ -165,9 +175,13 @@ class BalloonDataset(utils.Dataset):
         # Convert polygons to a bitmap mask of shape
         # [height, width, instance_count]
         info = self.image_info[image_id]
+        polygons = info["polygons"]
+        labels = info["labels"]
         mask = np.zeros([info["height"], info["width"], len(info["polygons"])],
                         dtype=np.uint8)
-        for i, p in enumerate(info["polygons"]):
+        for index in polygons:
+            polygon = polygons[index]
+            label = labels[index]
             x = []
             y = []
             for k in p:
@@ -179,7 +193,9 @@ class BalloonDataset(utils.Dataset):
 
         # Return mask, and array of class IDs of each instance. Since we have
         # one class ID only, we return an array of 1s
-        return mask.astype(np.bool), np.ones([mask.shape[-1]], dtype=np.int32)
+        num_ids = info['num_ids']
+        num_ids = np.array(num_ids, dtype=np.int32)
+        return mask, num_ids
 
     def image_reference(self, image_id):
         """Return the path of the image."""
@@ -208,6 +224,7 @@ def train(model):
     # COCO trained weights, we don't need to train too long. Also,
     # no need to train all layers, just the heads should do it.
     print("Training network heads")
+    print(typeof model)
     model.train(dataset_train, dataset_val,
                 learning_rate=config.LEARNING_RATE,
                 epochs=30,
