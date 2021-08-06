@@ -184,8 +184,8 @@ class BalloonDataset(utils.Dataset):
             x = []
             y = []
             for k in polygon:
-                x.append(p[0])
-                y.append(p[1])
+                x.append(k[0])
+                y.append(k[1])
             # Get indexes of pixels inside the polygon and set them to 1
             rr, cc = skimage.draw.polygon(x, y)
             mask[rr, cc, i] = 1
