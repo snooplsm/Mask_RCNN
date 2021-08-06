@@ -30,6 +30,7 @@ Usage: import the module (see Jupyter notebooks for examples), or run from
 import os
 import sys
 import json
+import glob
 import datetime
 import numpy as np
 import skimage.draw
