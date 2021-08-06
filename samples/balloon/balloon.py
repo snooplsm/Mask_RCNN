@@ -35,6 +35,7 @@ import glob
 import datetime
 import numpy as np
 import skimage.draw
+from pathlib import Path
 
 # Root directory of the project
 ROOT_DIR = os.path.abspath("/content/Mask_RCNN")
@@ -120,6 +121,7 @@ class BalloonDataset(utils.Dataset):
         files = glob.glob(osp.join(dataset_dir, "*.json"))
         # print("found files", files)
         for file in files:
+            p = Path(file)
             annotation = json.load(open(file))
             a = annotation
             for shape in a["shapes"]:
@@ -129,13 +131,13 @@ class BalloonDataset(utils.Dataset):
                 if shape["shape_type"]!="polygon":
                     continue
                 polygons = shape["points"]
-                image_path = os.path.join(dataset_dir, a['imagePath'])
+                image_path = os.path.join(dataset_dir, str(p.with_suffix('.jpg')))
                 image = skimage.io.imread(image_path)
                 height, width = image.shape[:2]
                 print("adding image ", label)
                 self.add_image(
                     label,
-                    image_id=a['imagePath'],  # use file name as a unique image id
+                    image_id=str(p.with_suffix('.jpg')),  # use file name as a unique image id
                     path=image_path,
                     width=width, height=height,
                     polygons=polygons)
