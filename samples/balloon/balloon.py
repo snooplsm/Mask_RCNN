@@ -118,13 +118,13 @@ class BalloonDataset(utils.Dataset):
         }
         print("labels", labels)
         files = glob.glob(osp.join(dataset_dir, "*.json"))
-        print("found files", files)
+        # print("found files", files)
         for file in files:
             annotation = json.load(open(file))
-
             # Add images
             for a in annotation:
-                for shape in a["shapes"]:
+                for shapeIndex in a["shapes"]:
+                    shape = a["shapes"][shapeIndex]
                     label = shape["label"]
                     if label not in labels:
                         continue
