@@ -132,6 +132,7 @@ class BalloonDataset(utils.Dataset):
                     image_path = os.path.join(dataset_dir, a['imagePath'])
                     image = skimage.io.imread(image_path)
                     height, width = image.shape[:2]
+                    print("adding image ", label)
                     self.add_image(
                         label,
                         image_id=a['imagePath'],  # use file name as a unique image id
@@ -185,6 +186,7 @@ def train(model):
     """Train the model."""
     # Training dataset.
     dataset_train = BalloonDataset()
+    print("loading model")
     dataset_train.load_balloon(args.dataset, "train")
     dataset_train.prepare()
 
