@@ -150,7 +150,6 @@ class BalloonDataset(utils.Dataset):
 
 
     def load_mask(self, image_id):
-        print("load mask!")
         """Generate instance masks for an image.
        Returns:
         masks: A bool array of shape [height, width, instance count] with
@@ -160,7 +159,6 @@ class BalloonDataset(utils.Dataset):
         # If not a balloon dataset image, delegate to parent class.
         image_info = self.image_info[image_id]
         if image_info["source"] != "reported":
-            print("image info source", image_info["source"])
             return super(self.__class__, self).load_mask(image_id)
 
         # Convert polygons to a bitmap mask of shape
@@ -171,7 +169,6 @@ class BalloonDataset(utils.Dataset):
         for i, p in enumerate(info["polygons"]):
             x = []
             y = []
-            print(p)
             for k in p:
                 x.append(p[0])
                 y.append(p[1])
