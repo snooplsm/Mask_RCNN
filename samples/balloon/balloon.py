@@ -136,7 +136,7 @@ class BalloonDataset(utils.Dataset):
                 height, width = image.shape[:2]
                 print("adding image ", label, polygons)
                 self.add_image(
-                    label,
+                    "reported",
                     image_id=str(p.with_suffix('.jpg')),  # use file name as a unique image id
                     path=image_path,
                     width=width, height=height,
@@ -170,8 +170,13 @@ class BalloonDataset(utils.Dataset):
                         dtype=np.uint8)
         for i, p in enumerate(info["polygons"]):
             print("polygons", p)
+            x = []
+            y = []
+            for i in p:
+                x.append(i[0])
+                y.append(i[1])
             # Get indexes of pixels inside the polygon and set them to 1
-            rr, cc = skimage.draw.polygon(p['all_points_y'], p['all_points_x'])
+            rr, cc = skimage.draw.polygon(x, y)
             mask[rr, cc, i] = 1
 
         # Return mask, and array of class IDs of each instance. Since we have
