@@ -2352,7 +2352,7 @@ class MaskRCNN(object):
         if os.name == 'nt':
             workers = 0
         else:
-            workers = 0
+            workers = 1
 
         self.keras_model.fit(
             train_generator,
