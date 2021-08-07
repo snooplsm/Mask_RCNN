@@ -180,15 +180,14 @@ class BalloonDataset(utils.Dataset):
         polygons = info["polygons"]
         mask = np.zeros([info["height"], info["width"], len(polygons)],
                         dtype=np.uint8)
-        for index in range(len(polygons)):
-            polygon = polygons[index]
+        for index, polygon in enumerate(polygons):
             x = []
             y = []
             for k in polygon:
                 x.append(k[0])
                 y.append(k[1])
             # Get indexes of pixels inside the polygon and set them to 1
-            rr, cc = skimage.draw.polygon(x, y)
+            rr, cc = skimage.draw.polygon(y,x)
             mask[rr, cc, index] = 1
 
         # Return mask, and array of class IDs of each instance. Since we have
