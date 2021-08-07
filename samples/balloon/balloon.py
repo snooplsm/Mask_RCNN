@@ -148,7 +148,7 @@ class BalloonDataset(utils.Dataset):
                     num_ids.append(labelz[x])
             self.add_image(
                 "reported",
-                image_id=f'{suff}',  # use file name as a unique image id
+                image_id=suff,  # use file name as a unique image id
                 path=image_path,
                 width=width, height=height,
                 polygons=polygons,
