@@ -236,7 +236,7 @@ class Config(object):
         """Display Configuration values."""
         print("\nConfigurations:")
         for key, val in self.to_dict().items():
-            print(f"{key:30} {val}")
+            print(key, val)
         # for a in dir(self):
         #     if not a.startswith("__") and not callable(getattr(self, a)):
         #         print("{:30} {}".format(a, getattr(self, a)))
