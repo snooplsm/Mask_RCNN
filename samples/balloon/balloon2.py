@@ -322,6 +322,3 @@ if __name__ == '__main__':
 
     detect_and_color_splash(model, image_path=args.images,
                                 video_path=args.video)
-    else:
-        print("'{}' is not recognized. "
-              "Use 'train' or 'splash'".format(args.command))
