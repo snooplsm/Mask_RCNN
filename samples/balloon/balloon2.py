@@ -217,7 +217,7 @@ def color_splash(image, mask):
     # has 3 RGB channels, though.
     gray = skimage.color.gray2rgb(skimage.color.rgb2gray(image)) * 255
     thresh = threshold_otsu(gray)
-    binary_thresh_img = gray & thresh
+    binary_thresh_img = gray > thresh
     # Copy color pixels from the original color image where mask is set
     if mask.shape[-1] > 0:
         # We're treating all instances as one, so collapse the mask into one layer
