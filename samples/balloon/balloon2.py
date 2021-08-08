@@ -310,8 +310,7 @@ if __name__ == '__main__':
     config = InferenceConfig()
     config.display()
 
-    else:
-        model = modellib.MaskRCNN(mode="inference", config=config,
+    model = modellib.MaskRCNN(mode="inference", config=config,
                                   model_dir=args.logs)
 
 
