@@ -232,7 +232,7 @@ def detect_and_color_splash(model, images_path=None, video_path=None):
     if images_path:
         # Run model detection and generate the color splash effect
         print("Running on {}".format(images_path))
-        for image_path in images_path:
+        for image_path in images_path.split(","):
             # Read image
             image = skimage.io.imread(image_path)
             # Detect objects
