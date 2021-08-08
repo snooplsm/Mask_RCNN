@@ -308,7 +308,7 @@ if __name__ == '__main__':
         GPU_COUNT = 1
         IMAGES_PER_GPU = 1
     config = InferenceConfig()
-    config.display()
+    #config.display()
 
     model = modellib.MaskRCNN(mode="inference", config=config,
                                   model_dir="logs")
@@ -320,5 +320,5 @@ if __name__ == '__main__':
 
     model.load_weights(weights_path, by_name=True)
 
-    detect_and_color_splash(model, image_paths=args.images,
+    detect_and_color_splash(model, images_path=args.images,
                                 video_path=args.video)
