@@ -320,5 +320,5 @@ if __name__ == '__main__':
 
     model.load_weights(weights_path, by_name=True)
 
-    detect_and_color_splash(model, image_path=args.images,
+    detect_and_color_splash(model, image_paths=args.images,
                                 video_path=args.video)
