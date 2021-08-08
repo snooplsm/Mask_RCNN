@@ -311,7 +311,7 @@ if __name__ == '__main__':
     config.display()
 
     model = modellib.MaskRCNN(mode="inference", config=config,
-                                  model_dir=args.logs)
+                                  model_dir="logs")
 
 
     weights_path = args.weights
