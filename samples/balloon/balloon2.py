@@ -240,7 +240,7 @@ def detect_and_color_splash(model, images_path=None, video_path=None):
             # Color splash
             splash = color_splash(image, r['masks'])
             # Save output
-            file_name = "splash_.png".format(os.path.basename(image_path))
+            file_name = f'splash_{os.path.basename(image_path)}.png'
             skimage.io.imsave(file_name, splash)
     elif video_path:
         import cv2
