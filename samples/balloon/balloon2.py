@@ -37,6 +37,7 @@ import numpy as np
 import skimage.draw
 from skimage.filters import threshold_otsu
 from pathlib import Path
+import tensorflow as tf
 
 # Root directory of the project
 ROOT_DIR = os.path.abspath("/content/Mask_RCNN")
@@ -325,3 +326,7 @@ if __name__ == '__main__':
 
     detect_and_color_splash(model, images_path=args.images,
                                 video_path=args.video)
+
+    converter = tf.lite.TFLiteConverter.from_keras_model(model)
+    with open('model.tflite', 'wb') as f:
+        f.write(tflite_model)
