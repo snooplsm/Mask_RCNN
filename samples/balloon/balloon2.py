@@ -38,6 +38,7 @@ import skimage.draw
 from skimage.filters import threshold_otsu
 from pathlib import Path
 import tensorflow as tf
+import tensorflow.keras.backend as K
 
 # Root directory of the project
 ROOT_DIR = os.path.abspath("/content/Mask_RCNN")
