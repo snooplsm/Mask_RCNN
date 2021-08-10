@@ -325,9 +325,9 @@ if __name__ == '__main__':
 
     model.load_weights(weights_path, by_name=True)
 
-    detect_and_color_splash(model, images_path=args.images,
-                                video_path=args.video)
-    # disable_eager_execution()
+    # detect_and_color_splash(model, images_path=args.images,
+    #                             video_path=args.video)
+    disable_eager_execution()
     converter = tf.lite.TFLiteConverter.from_keras_model(model.keras_model)
     tflite_model = converter.convert()
     with open('model.tflite', 'wb') as f:
