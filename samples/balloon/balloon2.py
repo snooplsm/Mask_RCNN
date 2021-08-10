@@ -38,7 +38,7 @@ import skimage.draw
 from skimage.filters import threshold_otsu
 from pathlib import Path
 import tensorflow as tf
-import tensorflow.keras.backend as K
+from tensorflow.python.framework.ops import disable_eager_execution
 
 # Root directory of the project
 ROOT_DIR = os.path.abspath("/content/Mask_RCNN")
@@ -327,7 +327,7 @@ if __name__ == '__main__':
 
     detect_and_color_splash(model, images_path=args.images,
                                 video_path=args.video)
-    tf.executing_eagerly()
+    disable_eager_execution()
     converter = tf.lite.TFLiteConverter.from_keras_model(model.keras_model)
     tflite_model = converter.convert()
     with open('model.tflite', 'wb') as f:
